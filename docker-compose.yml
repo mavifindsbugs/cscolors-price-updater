@@ -1,0 +1,7 @@
+services:
+  cscolors-price-updater:
+    tty: true
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file: ".env"
