@@ -10,21 +10,14 @@ def export_prices(filename: str, table: str):
     values = []
     with open(filename, "r") as file:
         prices = json.loads(file.read())
-        for name, price in prices.items():
-            steam = price.get("steam", None)
-            if steam:
-                steam = steam.get("last_30d", None)
-            if steam == 0:
-                steam = None
+        for item in prices:
+            name = item.get("market_hash_name")
+            name = name.replace("\u2605 ", "")
+            name = name.replace("\u2122", "")
 
-            skinport = price.get("skinport", None)
-            if skinport:
-                skinport = skinport.get("suggested_price", None)
-            buff = price.get("buff163", None)
-            if buff:
-                buff = buff.get("highest_order", None)
-            if buff:
-                buff = buff.get("price", None)
+            steam = None
+            buff = None
+            skinport = item.get("suggested_price", None)
             values.append({"name": name, "steam": steam, "skinport": skinport, "buff": buff})
         # print(values)
         supabase.table(table).upsert(values, on_conflict="name").execute()

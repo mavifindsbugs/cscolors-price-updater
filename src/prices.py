@@ -1,17 +1,13 @@
 import json
 import requests
 
-URL = "https://prices.csgotrader.app/latest/prices_v6.json"
+URL = "https://api.skinport.com/v1/items?app_id=730"
 
 
 def get_prices():
-    prices = {}
     res = requests.get(URL)
 
-    for item, data in json.loads(res.content).items():
-        item = item.replace("\u2605 ", "")
-        item = item.replace("\u2122", "")
-        prices[item] = data
+    prices = json.loads(res.content)
 
     print("Fetched prices for {} items.".format(len(prices)))
 
